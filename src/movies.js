@@ -1,74 +1,95 @@
+
 /* eslint no-restricted-globals: 'off' */
 // Turn duration of the movies from hours to minutes 
-
+function turnHoursToMinutes(movies) {
+  var moviesToMinutes = [...movies]; //create new array
+  moviesToMinutes.forEach(function(movie) {
+    var sumMinutes = 0;
+    var convertedTime = [];
+    //If the time has hours (and, or not, minutes)
+    if (movie.duration.includes("h")) {
+      var hours = movie.duration.split("h");
+      convertedTime.push(Number.parseInt(hours[0]) * 60);
+      if (hours[1].includes("min")) {
+        var minutes = hours[1].split("min");
+        convertedTime.push(Number.parseInt(minutes[0]));
+      }
+      sumMinutes = convertedTime.reduce(function(acc, val) {
+        return acc + val;
+      });
+      movie.duration = sumMinutes;
+      //If the time is only minutes
+    } else if (movie.duration.includes("min")) {
+      let minutes = movie.duration.split("min");
+      movie.duration = Number.parseInt(minutes[0]);
+    }
+  });
+  return moviesToMinutes;
+}
+console.log(turnHoursToMinutes(movies))
 
 // Get the average of all rates with 2 decimals 
-function ratesAverage(arr) {
 
-	var acumulador = arr.reduce(function(acc, movie){
- 		return acc + movie.rate;
-	}, 0);
-
-	return acumulador / arr.length;
+function averageRate(){
+	let suma = 0;
+	let average = 0;
+	for (var i = 0; i < movies.length; i++){
+		suma = suma + movies[i].rate;
+		average = suma/movies.length;
+		average = average.toFixed(2);
+	}
+	return average;
 }
-console.log(ratesAverage(movies))
+console.log(averageRate());
 
 // Get the average of Drama Movies
 
-function dramaMoviesRate(arr){
-
-
-		var array = arr.map(function(obj){
- 			return obj.genre;
-		})
-		var cant = 0;
-		for(var i = 0; i < array.length; i++){
-			
-		if (array[i].indexOf('Drama') === -1){
-			cant++;
+function dramaMoviesRate(){
+	let suma = 0;
+	let average = 0;
+	for (var i = 0; i < movies.length; i++){
+		if(movies[i].genre.includes('Drama') === true){
+		suma = suma + movies[i].rate;
+		average = suma/movies.length;
+		average = average.toFixed(2);
 		}
 	}
-	return cant / arr.length;
+	return average;
 }
-console.log(dramaMoviesRate(movies))
+console.log(dramaMoviesRate());
 
-//Order by time duration, in growing order
+//Ordering by duration - Order by time duration, ascending (in growing order)
 
 function orderByDuration (arr){
 	var array = arr.map(function(obj){
- 			return obj.duration;
+ 			return obj;
  		})
-	return array.sort()
+	return array.sort(function(a, b){
+		return a.duration - b.duration;
+	})
 }
-console.log(orderByDuration(movies))
-
+console.log(orderByDuration(movies));
 
 // How many movies did STEVEN SPIELBERG
-var cantPelis = 0;
-function howManyMovies(arr){
- 		var array = arr.filter(function(obj){
-			if(obj.director === 'Steven Spielberg'){
-				cantPelis++;
-			}
-			// else if(obj.director.length === 0){
-			// 	return undefiend
-			// }
 
+function howManyMovies(){
 
- 		})
-	return cantPelis;
+	var peliculasStevenSpilberg = movies.filter(function(peliculas){
+		return peliculas.director === 'Steven Spielberg';
+	})
+console.log(peliculasStevenSpilberg);
 }
-console.log(howManyMovies(movies))
-
+howManyMovies();
 
 // Order by title and print the first 20 titles
-function orderAlphabetic (arr){
-	var array = arr.map(function(obj){
- 			return obj.title;
- 		});
-	array.splice(20,500);
-	return array.sort();
-}
-console.log(orderAlphabetic(movies))
 
-// Best yearly rate average
+function orderAlphabetically(){
+	let newArray = []
+	for(var i = 0; i < movies.length; i++){
+		newArray.push(movies[i].title);
+		newArray.sort();
+		newArray.splice(20,250);
+	}
+	return newArray;
+}
+console.log(orderAlphabetically());
